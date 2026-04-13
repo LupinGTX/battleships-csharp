@@ -34,3 +34,6 @@ Projekt został podzielony na niezależne moduły:
 # Uwagi techniczne
 **Do poprawnego działania w 100% niezbędna jest lokalna instancja bazy danych (szczegóły w PDF).**
 **Gra zadziała bez niej (jako Gość), lecz nie będzie dostępna rejestracja, logowanie ani zapis wyników gier.**
+
+# Inne
+Zasoby graficzne: Ilustracje wykorzystane w projekcie pochodzą z otwartych źródeł internetowych i zostały użyte wyłącznie w celach edukacyjnych.
