@@ -1,4 +1,4 @@
-# Gra w Statki Online (C# / WPF) – Architektura Klient-Serwer
+# Gra w Statki Online (C# / WPF) - Architektura Klient-Serwer
 
 W pełni funkcjonalna, sieciowa gra planszowa w stylu klasycznych Statków, zaimplementowana jako aplikacja desktopowa. Projekt skupia się na asynchronicznej komunikacji sieciowej, architekturze klient-serwer oraz programowaniu zorientowanym obiektowo.
 
@@ -32,5 +32,5 @@ Projekt został podzielony na niezależne moduły:
 4. Zaloguj się, zarejestruj lub zagraj jako gość, a następnie kliknij "Znajdź grę".
 
 # Uwagi techniczne
-**Projekt wymaga skonfigurowania ConnectionString w pliku konfiguracyjnym serwera.**
 **Do poprawnego działania w 100% niezbędna jest lokalna instancja bazy danych (szczegóły w PDF).**
+**Gra zadziała bez niej (jako Gość), lecz nie będzie dostępna rejestracja, logowanie ani zapis wyników gier.**
