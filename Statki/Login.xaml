@@ -1,0 +1,105 @@
+﻿<UserControl x:Class="Statki.Login"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Statki"
+             mc:Ignorable="d" 
+             d:DesignHeight="800" d:DesignWidth="600">
+    <Grid>
+        <!-- Tło w postaci obrazka -->
+        <Grid.Background>
+            <ImageBrush ImageSource="\Images\Battleship 3 (dark).jpg"/>
+        </Grid.Background>
+
+        <!-- Główna kolumna z kontrolkami formularza -->
+        <StackPanel Margin="50">
+
+            <!-- Nagłówek formularza -->
+            <TextBlock FontSize="60"
+                       FontWeight="Bold"
+                       FontFamily="Candara"
+                       TextAlignment="Center" 
+                       TextWrapping="Wrap" 
+                       Text="Logowanie"
+                       Foreground="AntiqueWhite"
+                       Margin="10"/>
+
+            <!-- Komunikat o błędach -->
+            <TextBlock x:Name="ErrorBlock"
+                       Visibility="Collapsed"
+                       Margin="20"
+                       Foreground="Orange"
+                       FontSize="24"
+                       FontWeight="Bold"
+                       FontFamily="Candara"
+                       TextAlignment="Center" 
+                       TextWrapping="Wrap"/>
+
+            <!-- Tekst dla pola nazwy użytkownika -->
+            <TextBlock FontSize="32"
+                       FontWeight="Bold"
+                       FontFamily="Candara"
+                       TextAlignment="Left" 
+                       TextWrapping="Wrap" 
+                       Text="Nazwa użytkownika:"
+                       Foreground="AntiqueWhite"
+                       Margin="15,0"/>
+
+            <!-- Pole tekstowe na nazwę użytkownika -->
+            <TextBox x:Name="NicknameBox"
+                     Margin="15"
+                     Background="WhiteSmoke"
+                     FontSize="40"/>
+
+            <!-- Tekst dla hasła -->
+            <TextBlock FontSize="32"
+                       FontWeight="Bold"
+                       FontFamily="Candara"
+                       TextAlignment="Left" 
+                       TextWrapping="Wrap" 
+                       Text="Hasło:"
+                       Foreground="AntiqueWhite"
+                       Margin="15,0"/>
+
+            <!-- Pole na wpisanie hasła -->
+            <PasswordBox x:Name="PasswordBox"
+                         Margin="15"
+                         Background="WhiteSmoke"
+                         FontSize="40"
+                         Tag="Hasło"/>
+
+            <!-- Przycisk zatwierdzający rejestrację -->
+            <Button Content="Zatwierdź"
+                    Background="Wheat"
+                    FontSize="42"
+                    Margin="15"
+                    Click="Confirm_Click"
+                    HorizontalAlignment="Center"
+                    Padding="50,5"/>
+
+            <!-- Przycisk na wejście do gry jako gość -->
+            <Button x:Name="Guest_Button"
+                    Content="Zagraj jako gość"
+                    Background="Wheat"
+                    FontSize="42"
+                    Margin="15"
+                    Click="Guest_Click"
+                    HorizontalAlignment="Center"
+                    Padding="15,5"/>
+        </StackPanel>
+
+        <!-- Przycisk przejścia do rejestracji -->
+        <Button x:Name="Register_Button"
+                Content="Rejestracja"
+                VerticalAlignment="Bottom"
+                HorizontalAlignment="Center"
+                Padding="20,5"
+                Margin="20"
+                FontSize="32"
+                Background="Transparent"
+                Foreground="AntiqueWhite"
+                BorderThickness="0"
+                Click="Register_Click"/>
+    </Grid>
+</UserControl>

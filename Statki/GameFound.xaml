@@ -1,0 +1,151 @@
+﻿<!--
+Ekran przygotowania do gry. Gracz ustawia statki, po czym klika przycisk gotowości.
+Gotowość można anulować, również wyświetla informacje, czy ustawiono za dużo statków.
+-->
+    
+<UserControl x:Class="Statki.GameFound"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Statki"
+             mc:Ignorable="d" 
+             d:DesignHeight="800" d:DesignWidth="600">
+    
+    <!-- Własny styl dla A-J oraz 1-10 -->
+    <UserControl.Resources>
+        <Style x:Key="Styl" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="30"/>
+            <Setter Property="FontFamily" Value="Candara"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid>
+        <!-- Tło -->
+        <Grid.Background>
+            <ImageBrush ImageSource="\Images\wall2.jpg"/>
+        </Grid.Background>
+
+        <Grid.RowDefinitions>
+            <!-- Nagłówek -->
+            <RowDefinition Height="50"/>
+            <!-- Opis -->
+            <RowDefinition Height="100"/>
+            <!-- Plansza -->
+            <RowDefinition Height="*"/>
+            <!-- Przycisk gotowości -->
+            <RowDefinition Height="68"/>
+        </Grid.RowDefinitions>
+
+        <!-- Nagłówek -->
+        <TextBlock Name="Opponent"
+                   Grid.Row="0"
+                   TextWrapping="Wrap"
+                   TextAlignment="Center"
+                   Text="Znaleziono grę. Przeciwnik: Gość"
+                   FontFamily="Candara"
+                   FontSize="28"
+                   FontWeight="Bold"
+                   Foreground="White"
+                   HorizontalAlignment="Center"
+                   Margin="10,5,0,10" Width="Auto"/>
+
+        <!-- Opis -->
+        <TextBlock Name="ShipRemains"
+                   Grid.Row="1"
+                   TextWrapping="Wrap"
+                   TextAlignment="Center"
+                   Text="Ustaw swoje statki. Pozostały: 4x1, 3x2, 2x3, 1x4"
+                   FontFamily="Candara"
+                   FontSize="32"
+                   FontWeight="Bold"
+                   Foreground="White"
+                   HorizontalAlignment="Center"
+                   Margin="0,10,0,10" Width="450"/>
+
+        <!-- Plansza z etykietami -->
+        <Grid Grid.Row="2" Margin="20,20,20,20">
+            <Grid.RowDefinitions>
+                <!-- A-J -->
+                <RowDefinition Height="30"/>
+                <!-- Plansza -->
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <!-- 1-10 -->
+                <ColumnDefinition Width="30"/>
+                <!-- Plansza -->
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- A-J -->
+            <UniformGrid Grid.Row="0" Grid.Column="1" Columns="10">
+                <TextBlock Text="A" Style="{StaticResource Styl}"/>
+                <TextBlock Text="B" Style="{StaticResource Styl}"/>
+                <TextBlock Text="C" Style="{StaticResource Styl}"/>
+                <TextBlock Text="D" Style="{StaticResource Styl}"/>
+                <TextBlock Text="E" Style="{StaticResource Styl}"/>
+                <TextBlock Text="F" Style="{StaticResource Styl}"/>
+                <TextBlock Text="G" Style="{StaticResource Styl}"/>
+                <TextBlock Text="H" Style="{StaticResource Styl}"/>
+                <TextBlock Text="I" Style="{StaticResource Styl}"/>
+                <TextBlock Text="J" Style="{StaticResource Styl}"/>
+            </UniformGrid>
+
+            <!-- 1-10 -->
+            <UniformGrid Grid.Row="1" Grid.Column="0" Rows="10">
+                <TextBlock Text="1" Style="{StaticResource Styl}"/>
+                <TextBlock Text="2" Style="{StaticResource Styl}"/>
+                <TextBlock Text="3" Style="{StaticResource Styl}"/>
+                <TextBlock Text="4" Style="{StaticResource Styl}"/>
+                <TextBlock Text="5" Style="{StaticResource Styl}"/>
+                <TextBlock Text="6" Style="{StaticResource Styl}"/>
+                <TextBlock Text="7" Style="{StaticResource Styl}"/>
+                <TextBlock Text="8" Style="{StaticResource Styl}"/>
+                <TextBlock Text="9" Style="{StaticResource Styl}"/>
+                <TextBlock Text="10" Style="{StaticResource Styl}"/>
+            </UniformGrid>
+
+            <!-- Główna plansza gracza -->
+            <UniformGrid x:Name="PlayersGrid"
+                         Grid.Row="1" Grid.Column="1"
+                         Rows="10" Columns="10"
+                         Margin="0">
+            </UniformGrid>
+        </Grid>
+        
+        <!-- Przycisk gotowości -->
+        <Button x:Name="ReadyButton"
+                Grid.Row="3"
+                Content="Gotowy"
+                FontSize="28"
+                FontFamily="Candara"
+                FontWeight="Bold"
+                Foreground="White"
+                Background="Goldenrod"
+                BorderBrush="White"
+                BorderThickness="2"
+                HorizontalAlignment="Center"
+                Padding="15,5"
+                Margin="0,10,0,10"
+                IsEnabled="False"
+                Opacity="0.7"
+                Visibility="Visible"
+                Click="Ready_Click"/>
+        
+        <!-- Informacja o zbyt dużej ilości statków -->
+        <TextBlock x:Name="TooManyShipsBlock"
+                   Grid.Row="3"
+                   Text="Za dużo ustawionych statków. Usuń je."
+                   FontSize="28"
+                   FontWeight="Bold"
+                   HorizontalAlignment="Center"
+                   Foreground="OrangeRed"
+                   Margin="0,10,0,10"
+                   Visibility="Collapsed"/>
+    </Grid>
+</UserControl>

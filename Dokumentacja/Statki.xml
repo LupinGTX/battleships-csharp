@@ -1,0 +1,574 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Statki</name>
+    </assembly>
+    <members>
+        <member name="T:Statki.App">
+            <summary>
+            Klasa główna aplikacji WPF. Przechowuje globalne dane aplikacji, jak nazwa użytkownika i połączenie z serwerem.
+            </summary>
+            <summary>
+            App
+            </summary>
+        </member>
+        <member name="P:Statki.App.Username">
+            <summary>
+            Nazwa użytkownika aktualnie zalogowanego w aplikacji. Domyślnie ustawiona jako "Gosc".
+            </summary>
+        </member>
+        <member name="P:Statki.App.Connection">
+            <summary>
+            Obiekt zarządzający połączeniem z serwerem gry.
+            </summary>
+        </member>
+        <member name="M:Statki.App.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="M:Statki.App.Main">
+            <summary>
+            Application Entry Point.
+            </summary>
+        </member>
+        <member name="T:Statki.BoardGenerator">
+            <summary>
+            Klasa odpowiedzialna za generowanie plansz gracza i przeciwnika.
+            Wykorzystywana do tworzenia siatek przy rozmieszczaniu statków, podglądzie i grze.
+            </summary>
+        </member>
+        <member name="M:Statki.BoardGenerator.GeneratePlayerBoard(System.Windows.Controls.Primitives.UniformGrid,System.Windows.RoutedEventHandler)">
+            <summary>
+            Generuje planszę gracza w postaci siatki 10x10 z przyciskami.
+            Każdy przycisk reprezentuje jedno pole i ma przypisany identyfikator w postaci Point(row, col).
+            </summary>
+            <param name="Grid">Kontener typu UniformGrid, do którego dodawane są przyciski.</param>
+            <param name="Click">Delegat obsługujący kliknięcie w pole.</param>
+        </member>
+        <member name="M:Statki.BoardGenerator.GenerateUnclickableBoard(System.Windows.Controls.Primitives.UniformGrid,System.Int32[0:,0:])">
+            <summary>
+            Generuje planszę gracza jako nieklikalną siatkę 10x10.
+            Każde pole ma kolor zależny od wartości w macierzy playerBoardState.
+            </summary>
+            <param name="Grid">Kontener typu UniformGrid, do którego dodawane są pola jako ramki.</param>
+            <param name="playerBoardState">Dwuwymiarowa tablica reprezentująca stan planszy: 0 - puste, 1 - statek, 2 - trafiony statek, 3 - zatopiony statek.</param>
+        </member>
+        <member name="T:Statki.ClientConnection">
+            <summary>
+            Reprezentuje połączenie klienta z serwerem w grze.
+            </summary>
+        </member>
+        <member name="F:Statki.ClientConnection.client">
+            <summary>
+            Obiekt TCP reprezentujący połączenie klienta z serwerem.
+            </summary>
+        </member>
+        <member name="F:Statki.ClientConnection.stream">
+            <summary>
+            Strumień danych służący do komunikacji z serwerem.
+            </summary>
+        </member>
+        <member name="E:Statki.ClientConnection.MessageReceived">
+            <summary>
+            Zdarzenie wywoływane, gdy klient odbierze wiadomość tekstową od serwera.
+            </summary>
+        </member>
+        <member name="E:Statki.ClientConnection.ServerDisconnected">
+            <summary>
+            Zdarzenie wywoływane, gdy połączenie z serwerem zostanie nieoczekiwanie przerwane.
+            </summary>
+        </member>
+        <member name="M:Statki.ClientConnection.ConnectAsync(System.String,System.Int32,System.String)">
+            <summary>
+            Nawiązuje asynchroniczne połączenie z serwerem i wysyła nick użytkownika.
+            </summary>
+            <param name="ip">Adres IP serwera.</param>
+            <param name="port">Port serwera.</param>
+            <param name="nickname">Nick gracza do wysłania przy połączeniu.</param>
+        </member>
+        <member name="M:Statki.ClientConnection.Send(System.String)">
+            <summary>
+            Wysyła wiadomość do serwera.
+            </summary>
+            <param name="message">Wiadomość do wysłania.</param>
+        </member>
+        <member name="M:Statki.ClientConnection.ReceiveLoop">
+            <summary>
+            Asynchroniczna pętla odbierająca dane od serwera.
+            </summary>
+        </member>
+        <member name="M:Statki.ClientConnection.Disconnect">
+            <summary>
+            Rozłącza klienta z serwerem i zamyka strumienie.
+            </summary>
+        </member>
+        <member name="T:Statki.GameFound">
+            <summary>
+            Klasa odpowiadająca za ekran ustawiania statków oraz gotowości gracza do rozpoczęcia gry.
+            </summary>
+            <summary>
+            GameFound
+            </summary>
+        </member>
+        <member name="F:Statki.GameFound.playerBoardState">
+            <summary>
+            Stan planszy gracza. 0 - puste pole, 1 - statek, 2 - trafiony statek, 3 - zatopiony statek.
+            </summary>
+        </member>
+        <member name="F:Statki.GameFound.counted_ships">
+            <summary>
+            Liczba zliczonych statków każdego typu.
+            </summary>
+        </member>
+        <member name="F:Statki.GameFound.limits">
+            <summary>
+            Limity dozwolonej liczby statków każdego typu.
+            4 jednomasztowce, 3 dwumasztowce, 2 trójmasztowce, 1 czteromasztowiec.
+            </summary>
+        </member>
+        <member name="M:Statki.GameFound.#ctor(Statki.MainWindow,System.String)">
+            <summary>
+            Konstruktor ekranu z informacją o przeciwniku i generowaniem planszy.
+            </summary>
+            <param name="_main">Referencja do okna głównego aplikacji.</param>
+            <param name="opponent_nick">Nazwa użytkownika przeciwnika, aby wyświetlić ją graczowi.</param>
+        </member>
+        <member name="M:Statki.GameFound.Message_Received(System.String)">
+            <summary>
+            Obsługuje wiadomości przychodzące od serwera.
+            </summary>
+            <param name="msg">Treść przesłanego komunikatu.</param>
+        </member>
+        <member name="M:Statki.GameFound.Board_Click(System.Object,System.Windows.RoutedEventArgs)">
+            <summary>
+            Obsługa kliknięcia w przycisk siatki — dodaje lub usuwa statek.
+            </summary>
+        </member>
+        <member name="M:Statki.GameFound.UpdateShipInfo(System.Int32,System.Int32,System.Boolean)">
+            <summary>
+            Aktualizuje informacje o statkach w zależności od dodawania lub usuwania pola.
+            </summary>
+            <param name="row">Numer rzędu klikniętego przycisku.</param>
+            <param name="col">Numer kolumny klikniętego przycisku.</param>
+            <param name="deleting">Informacja, czy kliknięto w przycisk, aby usunąć statek czy go dodać.</param>
+            <returns>True, jeśli można ustawić statek na danym polu.</returns>
+        </member>
+        <member name="M:Statki.GameFound.UpdatingGUI">
+            <summary>
+            Aktualizuje wyświetlaną informację o pozostałych statkach i przycisku "Gotowy".
+            </summary>
+        </member>
+        <member name="M:Statki.GameFound.PrepDepthSearch(System.Int32,System.Int32,System.Int32@,System.Int32@)">
+            <summary>
+            DFS liczący liczbę bezpośrednich sąsiednich części statków pola startowego i rozmiar całego statku klikniętego pola.
+            </summary>
+            <param name="startRow">Startowy numer rzędu klikniętego pola.</param>
+            <param name="startCol">Startowy numer kolumny klikniętego pola.</param>
+            <param name="shipCount">Obliczana liczba części statków.</param>
+            <param name="neighbours">Obliczana liczba bezpośrednich sąsiednich części statków.</param>
+        </member>
+        <member name="M:Statki.GameFound.IsReady">
+            <summary>
+            Sprawdza, czy gracz może kliknąć przycisk "Gotowy" oraz anuluje gotowość jeśli edytuje planszę.
+            </summary>
+        </member>
+        <member name="M:Statki.GameFound.Ready_Click(System.Object,System.Windows.RoutedEventArgs)">
+            <summary>
+            Obsługa kliknięcia przycisku gotowości. Wysyła komunikat i aktualizuje UI.
+            </summary>
+        </member>
+        <member name="M:Statki.GameFound.Cancel_Click(System.Object,System.Windows.RoutedEventArgs)">
+            <summary>
+            Obsługa kliknięcia przycisku anulowania gotowości.
+            </summary>
+        </member>
+        <member name="M:Statki.GameFound.Cancel">
+            <summary>
+            Wewnętrzna logika anulowania gotowości — przywraca interfejs.
+            </summary>
+        </member>
+        <member name="M:Statki.GameFound.IsSquare(System.Int32,System.Int32)">
+            <summary>
+            Sprawdza, czy pole należy do kwadratu 2x2, czyli nieprawidłowej formacji czteromasztowca.
+            </summary>
+            <param name="row">Numer rzędu sprawdzanego pola.</param>
+            <param name="col">Numer kolumny sprawdzanego pola.</param>
+            <returns>True, jeśli statek byłby kwadratem 2x2.</returns>
+        </member>
+        <member name="M:Statki.GameFound.Finalize">
+            <summary>
+            Destruktor — odsubskrybowuje nasłuchiwanie, jeśli kontrolka jest usuwana.
+            </summary>
+        </member>
+        <member name="M:Statki.GameFound.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:Statki.GameScreen">
+            <summary>
+            Logika ekranu rozgrywki w Statkach.
+            Odpowiada za strzelanie, koloryzację planszy, komunikację z serwerem i obsługę tur.
+            </summary>
+            <summary>
+            GameScreen
+            </summary>
+        </member>
+        <member name="F:Statki.GameScreen.turnTimer">
+            <summary>
+            Timer tury, wskazujący że gracz ma 45 sekund na ruch.
+            </summary>
+        </member>
+        <member name="F:Statki.GameScreen.button">
+            <summary>
+            Globalny przycisk, przechowujący kliknięty przycisk z pola przeciwnika.
+            </summary>
+        </member>
+        <member name="F:Statki.GameScreen.playerTurn">
+            <summary>
+            Flaga wskazująca, czy jest obecnie tura gracza.
+            </summary>
+        </member>
+        <member name="F:Statki.GameScreen.ShipAmount">
+            <summary>
+            Liczba niezatopionych statków gracza.
+            </summary>
+        </member>
+        <member name="F:Statki.GameScreen.currentRow">
+            <summary>
+            Globalne przechowywanie koordynatów najświeżej klikniętego pola.
+            </summary>
+        </member>
+        <member name="F:Statki.GameScreen.currentCol">
+            <summary>
+            Globalne przechowywanie koordynatów najświeżej klikniętego pola.
+            </summary>
+        </member>
+        <member name="F:Statki.GameScreen.opponentBoardState">
+            <summary>
+            Macierz przechowująca informacje o stanie pól na planszy przeciwnika.
+            </summary>
+        </member>
+        <member name="F:Statki.GameScreen.playerBoardState">
+            <summary>
+            Macierz przechowująca informacje o stanie pól na planszy gracza.
+            </summary>
+        </member>
+        <member name="M:Statki.GameScreen.#ctor(Statki.MainWindow,System.Int32[0:,0:])">
+            <summary>
+            Konstruktor uruchamiający ekran rozgrywki.
+            </summary>
+            <param name="_main">Referencja do głównego okna.</param>
+            <param name="_playerBoardState">Stan planszy gracza, przekazany z ekranu przygotowania.</param>
+        </member>
+        <member name="M:Statki.GameScreen.GameLogic(System.String)">
+            <summary>
+            Główna logika gry reagująca na wiadomości od serwera.
+            </summary>
+            <param name="msg">Odebrana wiadomość.</param>
+        </member>
+        <member name="M:Statki.GameScreen.Board_Click(System.Object,System.Windows.RoutedEventArgs)">
+            <summary>
+            Obsługuje kliknięcie w planszę przeciwnika.
+            </summary>
+        </member>
+        <member name="M:Statki.GameScreen.GameDepthSearch(System.Int32,System.Int32,System.Int32@,System.Boolean,System.Windows.Controls.Primitives.UniformGrid,System.Int32[0:,0:])">
+            <summary>
+            Przeszukuje zatopiony statek (DFS).
+            </summary>
+            <param name="x">Rząd startowy.</param>
+            <param name="y">Kolumna startowa.</param>
+            <param name="shipCount">Zwracana liczba pól statku.</param>
+            <param name="sinking">Czy aktualnie zatapiamy statek?</param>
+            <param name="grid">Siatka, dla kolorowania (opcjonalna).</param>
+            <param name="BoardState">Stan planszy do przeszukiwania.</param>
+            <returns>True, jeśli znaleziono nieodkryte fragmenty statku.</returns>
+        </member>
+        <member name="M:Statki.GameScreen.ColorField(System.Windows.Controls.Primitives.UniformGrid,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Koloruje dane pole na planszy.
+            </summary>
+            <param name="grid">Plansza (siatka) do kolorowania.</param>
+            <param name="row">Rząd pola.</param>
+            <param name="col">Kolumna pola.</param>
+            <param name="color">Liczba koloru: 0 - pudło, 1 - trafiony, 2 - zatopiony.</param>
+        </member>
+        <member name="M:Statki.GameScreen.Result(System.Boolean)">
+            <summary>
+            Sprawdza, czy gracz przegrał/zakończył grę i pokazuje wynik.
+            </summary>
+            <param name="win">Flaga informująca czy gracz wygrał.</param>
+        </member>
+        <member name="M:Statki.GameScreen.End">
+            <summary>
+            Kończy grę — blokuje planszę i pokazuje ekran końcowy.
+            </summary>
+        </member>
+        <member name="M:Statki.GameScreen.BackButton_Click(System.Object,System.Windows.RoutedEventArgs)">
+            <summary>
+            Rozłączenie z serwerem i powrót do menu.
+            </summary>
+        </member>
+        <member name="M:Statki.GameScreen.StartTurnTimer">
+            <summary>
+            Uruchamia timer tury, trwający 45 sekund.
+            </summary>
+        </member>
+        <member name="M:Statki.GameScreen.StopTurnTimer">
+            <summary>
+            Zatrzymuje timer tury.
+            </summary>
+        </member>
+        <member name="M:Statki.GameScreen.TurnTimer_Tick(System.Object,System.EventArgs)">
+            <summary>
+            Odliczanie sekund do końca tury i reakcja na przekroczenie limitu czasu.
+            </summary>
+        </member>
+        <member name="M:Statki.GameScreen.Legend_Click(System.Object,System.Windows.RoutedEventArgs)">
+            <summary>
+            Przycisk pokazujący lub ukrywający legendę kolorów.
+            </summary>
+        </member>
+        <member name="M:Statki.GameScreen.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:Statki.GameSearch">
+            <summary>
+            Ekran wyszukiwania przeciwnika. Próbuje połączyć się z serwerem,
+            odlicza czas i reaguje na znalezienie gry lub błędy.
+            </summary>
+            <summary>
+            GameSearch
+            </summary>
+        </member>
+        <member name="F:Statki.GameSearch.connection">
+            <summary>
+            Obiekt obsługujący połączenie z serwerem.
+            </summary>
+        </member>
+        <member name="F:Statki.GameSearch.timer">
+            <summary>
+            Timer aktualizujący czas oczekiwania na przeciwnika.
+            </summary>
+        </member>
+        <member name="F:Statki.GameSearch.secondsPassed">
+            <summary>
+            Liczba sekund, które minęły od rozpoczęcia wyszukiwania.
+            </summary>
+        </member>
+        <member name="M:Statki.GameSearch.#ctor(Statki.MainWindow)">
+            <summary>
+            Konstruktor inicjalizuje komponent, timer, połączenie z serwerem i zaczyna wyszukiwanie gry.
+            </summary>
+            <param name="_main">Referencja do okna głównego aplikacji.</param>
+        </member>
+        <member name="M:Statki.GameSearch.Timer_Tick(System.Object,System.EventArgs)">
+            <summary>
+            Zdarzenie wywoływane co sekundę, aktualizuje licznik czasu.
+            </summary>
+        </member>
+        <member name="M:Statki.GameSearch.Cancel_Click(System.Object,System.Windows.RoutedEventArgs)">
+            <summary>
+            Obsługa kliknięcia przycisku anulowania, który zatrzymuje timer, rozłącza i wraca do menu.
+            </summary>
+        </member>
+        <member name="M:Statki.GameSearch.StartConnection(Statki.ClientConnection)">
+            <summary>
+            Inicjuje połączenie z serwerem oraz obsługuje komunikaty zwrotne.
+            </summary>
+            <param name="connection">Obiekt ClientConnection do połączenia z serwerem.</param>
+        </member>
+        <member name="M:Statki.GameSearch.Error(System.String)">
+            <summary>
+            Wyświetla błąd w interfejsie użytkownika oraz zatrzymuje zegar.
+            </summary>
+            <param name="errmsg">Treść błędu do wyświetlenia.</param>
+        </member>
+        <member name="M:Statki.GameSearch.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:Statki.Login">
+            <summary>
+            Klasa odpowiedzialna za ekran logowania użytkownika.
+            </summary>
+            <summary>
+            Login
+            </summary>
+        </member>
+        <member name="F:Statki.Login.connectionSettings">
+            <summary>
+            Ustawienia połączenia do bazy danych odczytane z pliku App.config.
+            </summary>
+        </member>
+        <member name="M:Statki.Login.#ctor(Statki.MainWindow)">
+            <summary>
+            Konstruktor klasy Login. Inicjalizuje komponenty i tworzy połączenie z bazą danych.
+            </summary>
+            <param name="_main">Referencja do głównego okna.</param>
+        </member>
+        <member name="M:Statki.Login.Confirm_Click(System.Object,System.Windows.RoutedEventArgs)">
+            <summary>
+            Obsługuje kliknięcie przycisku "Zatwierdź" i próbuje zalogować użytkownika.
+            Sprawdza poprawność danych i weryfikuje je z bazą danych.
+            </summary>
+        </member>
+        <member name="M:Statki.Login.Guest_Click(System.Object,System.Windows.RoutedEventArgs)">
+            <summary>
+            Obsługuje kliknięcie przycisku "Gość" – logowanie bez konta.
+            </summary>
+        </member>
+        <member name="M:Statki.Login.Register_Click(System.Object,System.Windows.RoutedEventArgs)">
+            <summary>
+            Obsługuje kliknięcie przycisku "Zarejestruj", przełącza widok do ekranu rejestracji.
+            </summary>
+        </member>
+        <member name="M:Statki.Login.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:Statki.MainMenu">
+            <summary>
+            Klasa odpowiedzialna za główne menu aplikacji po zalogowaniu.
+            </summary>
+            <summary>
+            MainMenu
+            </summary>
+        </member>
+        <member name="M:Statki.MainMenu.#ctor(Statki.MainWindow)">
+            <summary>
+            Konstruktor głównego menu. Inicjalizuje komponenty i ustawia referencję do MainWindow.
+            </summary>
+            <param name="_main">Referencja do głównego okna aplikacji.</param>
+        </member>
+        <member name="M:Statki.MainMenu.FindGame_Click(System.Object,System.Windows.RoutedEventArgs)">
+            <summary>
+            Obsługuje kliknięcie przycisku "Znajdź grę".
+            Przełącza widok do ekranu wyszukiwania przeciwnika.
+            </summary>
+        </member>
+        <member name="M:Statki.MainMenu.Exit_Click(System.Object,System.Windows.RoutedEventArgs)">
+            <summary>
+            Obsługuje kliknięcie przycisku "Wyjdź".
+            Zamyka aplikację.
+            </summary>
+        </member>
+        <member name="M:Statki.MainMenu.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:Statki.MainWindow">
+            <summary>
+            Główne okno aplikacji. Zarządza ekranami aplikacji oraz reaguje na rozłączenia z serwerem i przeciwnikiem.
+            </summary>
+            <summary>
+            MainWindow
+            </summary>
+        </member>
+        <member name="M:Statki.MainWindow.#ctor">
+            <summary>
+            Konstruktor MainWindow. Inicjalizuje xaml i pokazuje ekran logowania.
+            </summary>
+        </member>
+        <member name="M:Statki.MainWindow.ShowLogin">
+            <summary>
+            Wyświetla ekran logowania.
+            </summary>
+        </member>
+        <member name="M:Statki.MainWindow.ShowRegistering">
+            <summary>
+            Wyświetla ekran rejestracji.
+            </summary>
+        </member>
+        <member name="M:Statki.MainWindow.ShowMenu">
+            <summary>
+            Wyświetla menu główne.
+            </summary>
+        </member>
+        <member name="M:Statki.MainWindow.ShowSearch">
+            <summary>
+            Wyświetla ekran wyszukiwania przeciwnika.
+            </summary>
+        </member>
+        <member name="M:Statki.MainWindow.ShowPrep(System.String)">
+            <summary>
+            Wyświetla ekran z informacją o znalezieniu przeciwnika i przygotowanie do gry.
+            </summary>
+            <param name="opponent_nickname">Nazwa przeciwnika.</param>
+        </member>
+        <member name="M:Statki.MainWindow.ShowGame(System.Int32[0:,0:])">
+            <summary>
+            Wyświetla ekran gry z aktualnym stanem planszy gracza.
+            </summary>
+            <param name="playerBoardState">Dwuwymiarowa tablica reprezentująca planszę gracza.</param>
+        </member>
+        <member name="M:Statki.MainWindow.ServerDisconnected">
+            <summary>
+            Obsługuje utratę połączenia z serwerem. Informuje użytkownika i przekierowuje do menu.
+            </summary>
+        </member>
+        <member name="M:Statki.MainWindow.OpponentDisconnected">
+            <summary>
+            Obsługuje rozłączenie przeciwnika. Informuje użytkownika i przekierowuje do menu jak poprzednia metoda.
+            </summary>
+        </member>
+        <member name="M:Statki.MainWindow.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:Statki.Register">
+            <summary>
+            Ekran rejestracji nowego użytkownika.
+            </summary>
+            <summary>
+            Register
+            </summary>
+        </member>
+        <member name="F:Statki.Register.main">
+            <summary>
+            Referencja do głównego okna aplikacji, prowadząca system nawigacji między ekranami.
+            </summary>
+        </member>
+        <member name="F:Statki.Register.connectionSettings">
+            <summary>
+            Ustawienia połączenia z bazą danych, pobierane z pliku App.config.
+            </summary>
+        </member>
+        <member name="M:Statki.Register.#ctor(Statki.MainWindow)">
+            <summary>
+            Konstruktor ekranu rejestracji.
+            </summary>
+            <param name="_main">Referencja do głównego okna aplikacji.</param>
+        </member>
+        <member name="M:Statki.Register.Confirm_Click(System.Object,System.Windows.RoutedEventArgs)">
+            <summary>
+            Obsługa kliknięcia przycisku "Zarejestruj".
+            Waliduje dane użytkownika, sprawdza ich unikalność w bazie i zapisuje nowego użytkownika.
+            </summary>
+        </member>
+        <member name="M:Statki.Register.Login_Click(System.Object,System.Windows.RoutedEventArgs)">
+            <summary>
+            Obsługa kliknięcia przycisku "Logowanie," który przenosi do ekranu logowania.
+            </summary>
+        </member>
+        <member name="M:Statki.Register.HashPassword(System.String)">
+            <summary>
+            Haszuje hasło użytkownika za pomocą SHA256 i koduje je w Base64.
+            </summary>
+            <param name="password">Hasło w postaci tekstowej.</param>
+            <returns>Hasz hasła w postaci ciągu Base64.</returns>
+        </member>
+        <member name="M:Statki.Register.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+    </members>
+</doc>

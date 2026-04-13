@@ -1,0 +1,57 @@
+﻿<!--
+Ekran głównego menu aplikacji po zalogowaniu użytkownika.
+Umożliwia przejście do wyszukiwania gry lub wyjście z aplikacji.
+-->
+    
+<UserControl x:Class="Statki.MainMenu"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Statki"
+             mc:Ignorable="d" 
+             d:DesignHeight="800" d:DesignWidth="600">
+    <Grid>
+        <!-- Tło -->
+        <Grid.Background>
+            <ImageBrush ImageSource="\Images\Battleship 3.jpg"/>
+        </Grid.Background>
+
+        <!-- Tytuł gry "Statki" -->
+        <TextBlock Text="Statki" 
+                   FontSize="120" 
+                   TextWrapping="Wrap" 
+                   FontFamily="Candara" 
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Top"
+                   Margin="0,40,0,0"/>
+
+        <!-- Panel z przyciskami: Znajdź grę, Wyjście -->
+        <StackPanel HorizontalAlignment="Center" Width="350" Margin="0,210,0,0">
+
+            <!-- Przycisk do przejścia do wyszukiwania przeciwnika -->
+            <Button Content="Znajdź grę" 
+                    Background="Wheat" 
+                    FontSize="50" 
+                    FontFamily="Candara" 
+                    Click="FindGame_Click" 
+                    Height="85"/>
+
+            <!-- Przycisk do wyświetlania wyników -->
+            <!--<Button Content="Tabela wyników" 
+                    Background="Transparent" 
+                    FontSize="40" 
+                    FontFamily="Candara" 
+                    Click="Scores_Click" 
+                    Height="68"/>-->
+
+            <!-- Przycisk do zamknięcia aplikacji -->
+            <Button Content="Wyjście" 
+                    Background="Wheat" 
+                    FontSize="50" 
+                    FontFamily="Candara" 
+                    Click="Exit_Click"
+                    Height="82"/>
+        </StackPanel>
+    </Grid>
+</UserControl>

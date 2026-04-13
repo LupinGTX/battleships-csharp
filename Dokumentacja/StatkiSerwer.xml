@@ -1,0 +1,138 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>StatkiSerwer</name>
+    </assembly>
+    <members>
+        <member name="T:StatkiSerwer.GameSave">
+            <summary>
+            Klasa statyczna do zapisywania wyników gry oraz aktualizacji statystyk graczy w bazie danych.
+            </summary>
+        </member>
+        <member name="F:StatkiSerwer.GameSave.connectionSettings">
+            <summary>
+            Ustawienia połączenia do bazy danych odczytane z pliku App.config.
+            </summary>
+        </member>
+        <member name="F:StatkiSerwer.GameSave.conn">
+            <summary>
+            Połączenie do bazy danych PostgreSQL.
+            </summary>
+        </member>
+        <member name="M:StatkiSerwer.GameSave.Save(System.String,System.String,System.String,System.String)">
+            <summary>
+            Zapisuje wynik gry i aktualizuje statystyki zwycięzcy i przegranego w bazie danych.
+            </summary>
+            <param name="player1">Nick pierwszego gracza.</param>
+            <param name="player2">Nick drugiego gracza.</param>
+            <param name="zwyciezca">Nick zwycięzcy.</param>
+            <param name="przegrany">Nick przegranego.</param>
+        </member>
+        <member name="M:StatkiSerwer.GameSave.GameSaving(System.String,System.String,System.String)">
+            <summary>
+            Wstawia rekord nowej gry do tabeli "Gry".
+            </summary>
+            <param name="gracz1">Nick pierwszego gracza.</param>
+            <param name="gracz2">Nick drugiego gracza.</param>
+            <param name="zwyciezca">Nick zwycięzcy.</param>
+        </member>
+        <member name="M:StatkiSerwer.GameSave.PlayerStatisticsSave(System.String,System.String)">
+            <summary>
+            Aktualizuje statystyki pojedynczego gracza w tabeli "Uzytkownicy".
+            </summary>
+            <param name="nickname">Nick gracza, którego statystyki mają być zaktualizowane.</param>
+            <param name="query">Zapytanie SQL aktualizujące statystyki.</param>
+        </member>
+        <member name="T:StatkiSerwer.Player">
+            <summary>
+            Reprezentuje gracza połączonego z serwerem.
+            </summary>
+        </member>
+        <member name="P:StatkiSerwer.Player.Client">
+            <summary>
+            Połączenie TCP z klientem reprezentującym tego gracza.
+            </summary>
+        </member>
+        <member name="P:StatkiSerwer.Player.Nickname">
+            <summary>
+            Nazwa gracza przesłana przez klienta.
+            </summary>
+        </member>
+        <member name="P:StatkiSerwer.Player.Opponent">
+            <summary>
+            Przeciwnik gracza.
+            </summary>
+        </member>
+        <member name="P:StatkiSerwer.Player.IsReady">
+            <summary>
+            Czy gracz jest gotowy do rozpoczęcia gry.
+            </summary>
+        </member>
+        <member name="P:StatkiSerwer.Player.First">
+            <summary>
+            Czy gracz rozpoczyna grę jako pierwszy.
+            </summary>
+        </member>
+        <member name="M:StatkiSerwer.Player.#ctor(System.Net.Sockets.TcpClient,System.String)">
+            <summary>
+            Inicjalizuje nową instancję klasy <see cref="T:StatkiSerwer.Player"/> z podanym połączeniem i nickiem.
+            </summary>
+            <param name="client">Obiekt TcpClient reprezentujący połączenie z graczem.</param>
+            <param name="nickname">Nick gracza przesłany przez klienta.</param>
+        </member>
+        <member name="T:StatkiSerwer.Program">
+            <summary>
+            Główna klasa serwera obsługująca połączenia TCP oraz logikę gry.
+            </summary>
+        </member>
+        <member name="F:StatkiSerwer.Program.waitingPlayer">
+            <summary>
+            Gracz oczekujący na przeciwnika.
+            </summary>
+        </member>
+        <member name="F:StatkiSerwer.Program.locker">
+            <summary>
+            Obiekt do synchronizacji dostępu do współdzielonych zasobów.
+            </summary>
+        </member>
+        <member name="F:StatkiSerwer.Program.gameOver">
+            <summary>
+            Określa, czy gra została zakończona.
+            </summary>
+        </member>
+        <member name="F:StatkiSerwer.Program.ServerFree">
+            <summary>
+            Określa, czy serwer jest dostępny do przyjmowania nowych graczy.
+            </summary>
+        </member>
+        <member name="F:StatkiSerwer.Program.connectedPlayers">
+            <summary>
+            Liczba aktualnie połączonych graczy.
+            </summary>
+        </member>
+        <member name="M:StatkiSerwer.Program.Main">
+            <summary>
+            Metoda główna, uruchamia serwer TCP.
+            </summary>
+        </member>
+        <member name="M:StatkiSerwer.Program.WriteInConsole(System.String)">
+            <summary>
+            Wypisuje wiadomość na konsoli serwera z aktualnym czasem.
+            </summary>
+            <param name="msg">Wiadomość do wyświetlenia.</param>
+        </member>
+        <member name="M:StatkiSerwer.Program.HandleClient(System.Net.Sockets.TcpClient)">
+            <summary>
+            Obsługuje pojedyncze połączenie klienta - logika kojarzenia, gra i komunikacja.
+            </summary>
+            <param name="client">Połączenie TCP z klientem.</param>
+        </member>
+        <member name="M:StatkiSerwer.Program.Send(System.Net.Sockets.TcpClient,System.String)">
+            <summary>
+            Wysyła wiadomość do klienta za pomocą strumienia TCP.
+            </summary>
+            <param name="client">Obiekt klienta TCP.</param>
+            <param name="message">Wiadomość do wysłania.</param>
+        </member>
+    </members>
+</doc>
